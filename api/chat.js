@@ -22,7 +22,7 @@ module.exports = async function handler(req, res) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-3-5-haiku-20241022',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 1024,
         system: `당신은 강태은을 소개하는 AI 안내자입니다. 강태은에 대한 질문에 친근하고 간결하게 답해주세요.
 
