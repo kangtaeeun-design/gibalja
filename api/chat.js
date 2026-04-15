@@ -13,17 +13,18 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: '잘못된 요청입니다' });
   }
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      system: `당신은 강태은을 소개하는 AI 안내자입니다. 강태은에 대한 질문에 친근하고 간결하게 답해주세요.
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: 'claude-3-5-haiku-20241022',
+        max_tokens: 1024,
+        system: `당신은 강태은을 소개하는 AI 안내자입니다. 강태은에 대한 질문에 친근하고 간결하게 답해주세요.
 
 강태은 소개:
 - 이름: 강태은
@@ -37,18 +38,22 @@ module.exports = async function handler(req, res) {
 - 강태은 본인이 아닌 강태은에 대한 안내자로서 3인칭으로 답해주세요
 - 짧고 친근하게 답해주세요 (2~4문장 이내)
 - 모르는 정보는 솔직하게 모른다고 하세요`,
-      messages,
-    }),
-  });
+        messages,
+      }),
+    });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Anthropic API error:', errorText);
-    return res.status(500).json({ error: '응답 생성에 실패했습니다' });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Anthropic API error:', errorText);
+      return res.status(500).json({ error: '응답 생성에 실패했습니다' });
+    }
+
+    const data = await response.json();
+    const message = data.content?.[0]?.text ?? '응답을 받지 못했습니다';
+
+    return res.status(200).json({ message });
+  } catch (error) {
+    console.error('fetch error:', error);
+    return res.status(500).json({ error: '서버 오류가 발생했습니다' });
   }
-
-  const data = await response.json();
-  const message = data.content?.[0]?.text ?? '응답을 받지 못했습니다';
-
-  return res.status(200).json({ message });
 };
