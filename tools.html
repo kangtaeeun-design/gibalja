@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>강태은 | 도구</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #0a0e1a 0%, #0d1832 40%, #0f2045 70%, #0a1628 100%);
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #333;
+      padding: 32px 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 52px 56px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.45),
+        0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ── 네비게이션 ── */
+    .nav {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .nav a {
+      font-size: 13px;
+      font-weight: 600;
+      color: #aaa;
+      text-decoration: none;
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1.5px solid #e8e8e8;
+      background: #f5f5f5;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
+    }
+
+    .nav a:hover {
+      color: #03c75a;
+      border-color: #03c75a;
+      background: #e8faf1;
+    }
+
+    .nav a.active {
+      color: #fff;
+      background: linear-gradient(135deg, #00c473, #03c75a);
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(0, 196, 115, 0.35);
+    }
+
+    /* ── 헤더 ── */
+    .tool-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .tool-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #0a0e1a, #0f2045);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 32px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .tool-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #111;
+      margin-bottom: 10px;
+    }
+
+    .tool-desc {
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    .tool-desc em {
+      font-style: normal;
+      color: #03c75a;
+      font-weight: 700;
+    }
+
+    /* ── 구분선 ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 36px 0;
+    }
+
+    /* ── 섹션 레이블 ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #aaa;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    /* ── 입력 영역 ── */
+    .input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .idea-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 16px 18px;
+      border: 1.5px solid #e2e6ee;
+      border-radius: 14px;
+      font-size: 14px;
+      font-family: 'Noto Sans KR', sans-serif;
+      line-height: 1.7;
+      color: #333;
+      background: #f7f9fc;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .idea-textarea:focus {
+      border-color: #03c75a;
+      box-shadow: 0 0 0 3px rgba(3, 199, 90, 0.12);
+      background: #fff;
+    }
+
+    .idea-textarea::placeholder {
+      color: #bbb;
+    }
+
+    .generate-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #00c473, #03c75a);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      box-shadow: 0 4px 14px rgba(0, 196, 115, 0.4);
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 196, 115, 0.5);
+    }
+
+    .generate-btn:active {
+      transform: translateY(0);
+    }
+
+    .generate-btn:disabled {
+      background: #d0d4dc;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── 로딩 스피너 ── */
+    .loading-row {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      color: #aaa;
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .loading-row.visible {
+      display: flex;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #e0e0e0;
+      border-top-color: #03c75a;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+
+    /* ── 결과 영역 ── */
+    .result-section {
+      display: none;
+      margin-top: 0;
+    }
+
+    .result-section.visible {
+      display: block;
+    }
+
+    .result-box {
+      background: #f7f9fc;
+      border: 1px solid #eff1f5;
+      border-radius: 14px;
+      padding: 20px 22px;
+      position: relative;
+    }
+
+    .result-text {
+      font-size: 14.5px;
+      color: #222;
+      line-height: 1.85;
+      white-space: pre-wrap;
+      word-break: keep-all;
+    }
+
+    .result-text .story-line {
+      display: block;
+      padding: 6px 0;
+      border-bottom: 1px solid #eff1f5;
+    }
+
+    .result-text .story-line:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .copy-btn {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      background: #fff;
+      border: 1.5px solid #e2e6ee;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Noto Sans KR', sans-serif;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+      color: #03c75a;
+      border-color: #03c75a;
+      background: #e8faf1;
+    }
+
+    .copy-btn.copied {
+      color: #03c75a;
+      border-color: #03c75a;
+      background: #e8faf1;
+    }
+
+    .copy-btn svg {
+      flex-shrink: 0;
+    }
+
+    /* ── 에러 ── */
+    .error-msg {
+      display: none;
+      background: #fff5f5;
+      border: 1px solid #ffd0d0;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 13.5px;
+      color: #cc4444;
+      margin-top: 0;
+    }
+
+    .error-msg.visible {
+      display: block;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #bbb;
+      text-align: center;
+    }
+
+    /* ── 스크롤 애니메이션 ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <!-- 네비게이션 -->
+    <nav class="nav">
+      <a href="index.html">소개</a>
+      <a href="projects.html">프로젝트</a>
+      <a href="tools.html" class="active">도구</a>
+    </nav>
+
+    <!-- 헤더 -->
+    <div class="tool-header reveal">
+      <div class="tool-icon">✍️</div>
+      <div class="tool-title">사용자 스토리 생성기</div>
+      <div class="tool-desc">
+        기능 아이디어를 입력하면<br />
+        <em>AI가 사용자 스토리 형식</em>으로 변환해드려요
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 입력 영역 -->
+    <div class="reveal" style="transition-delay: 0.07s;">
+      <div class="section-label">기능 아이디어 입력</div>
+      <div class="input-area">
+        <textarea
+          class="idea-textarea"
+          id="ideaInput"
+          placeholder="예: 사용자가 상품 이미지를 올리면 AI가 자동으로 상품명, 카테고리, 설명을 생성해주는 기능"
+        ></textarea>
+        <button class="generate-btn" id="generateBtn">사용자 스토리 생성</button>
+        <div class="loading-row" id="loadingRow">
+          <div class="spinner"></div>
+          <span>AI가 사용자 스토리를 작성 중입니다...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 결과 영역 -->
+    <div class="result-section reveal" id="resultSection" style="transition-delay: 0.05s;">
+      <hr class="divider" />
+      <div class="section-label">생성된 사용자 스토리</div>
+      <div class="result-box">
+        <div class="result-text" id="resultText"></div>
+      </div>
+      <button class="copy-btn" id="copyBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        결과 복사하기
+      </button>
+    </div>
+
+    <!-- 에러 영역 -->
+    <div class="error-msg" id="errorMsg">
+      오류가 발생했습니다. 잠시 후 다시 시도해주세요.
+    </div>
+
+    <div class="footer reveal" style="transition-delay: 0.1s;">강태은의 도구 · 2026</div>
+  </div>
+
+  <script>
+    const ideaInput = document.getElementById('ideaInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const loadingRow = document.getElementById('loadingRow');
+    const resultSection = document.getElementById('resultSection');
+    const resultText = document.getElementById('resultText');
+    const copyBtn = document.getElementById('copyBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
+    async function generateStory() {
+      const idea = ideaInput.value.trim();
+      if (!idea || generateBtn.disabled) return;
+
+      // 상태 초기화
+      errorMsg.classList.remove('visible');
+      resultSection.classList.remove('visible');
+      generateBtn.disabled = true;
+      ideaInput.disabled = true;
+      loadingRow.classList.add('visible');
+
+      const systemPrompt = `당신은 IT 서비스 기획 전문가입니다.
+사용자가 기능 아이디어를 설명하면, 아래 형식의 사용자 스토리로 변환해주세요.
+
+형식:
+사용자는 [목적]을 위해 [기능]을 원한다. 왜냐하면 [이유]
+
+규칙:
+- 기능 하나당 사용자 스토리 하나를 작성합니다.
+- 필요하다면 2~4개의 스토리로 나눠 작성할 수 있습니다.
+- 각 스토리는 개행으로 구분합니다.
+- 번호를 붙이지 않고, 각 스토리만 출력합니다.
+- 설명이나 부연 없이 스토리만 작성합니다.`;
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [
+              { role: 'user', content: idea }
+            ],
+            system: systemPrompt
+          }),
+        });
+
+        if (!res.ok) throw new Error('API 오류');
+
+        const data = await res.json();
+        const reply = data.message || '';
+
+        if (!reply) throw new Error('빈 응답');
+
+        resultText.textContent = reply;
+        resultSection.classList.add('visible');
+        copyBtn.textContent = '';
+        copyBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          결과 복사하기
+        `;
+        copyBtn.classList.remove('copied');
+      } catch {
+        errorMsg.classList.add('visible');
+      }
+
+      loadingRow.classList.remove('visible');
+      generateBtn.disabled = false;
+      ideaInput.disabled = false;
+    }
+
+    generateBtn.addEventListener('click', generateStory);
+
+    ideaInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        generateStory();
+      }
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const text = resultText.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.classList.add('copied');
+        copyBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          복사 완료!
+        `;
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyBtn.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            결과 복사하기
+          `;
+        }, 2000);
+      } catch {
+        // clipboard API 미지원 환경 fallback
+        const range = document.createRange();
+        range.selectNode(resultText);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+      }
+    });
+
+    // 스크롤 애니메이션
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>
