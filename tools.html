@@ -71,6 +71,41 @@
       box-shadow: 0 2px 8px rgba(0, 196, 115, 0.35);
     }
 
+    /* ── 도구 탭 ── */
+    .tool-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+      background: #f5f7fb;
+      border-radius: 14px;
+      padding: 5px;
+    }
+
+    .tool-tab {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      color: #999;
+      background: transparent;
+      transition: all 0.2s;
+      letter-spacing: -0.2px;
+    }
+
+    .tool-tab:hover {
+      color: #555;
+    }
+
+    .tool-tab.active {
+      background: #fff;
+      color: #111;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
     /* ── 헤더 ── */
     .tool-header {
       text-align: center;
@@ -137,7 +172,7 @@
 
     .idea-textarea {
       width: 100%;
-      min-height: 120px;
+      min-height: 100px;
       padding: 16px 18px;
       border: 1.5px solid #e2e6ee;
       border-radius: 14px;
@@ -237,7 +272,6 @@
       border: 1px solid #eff1f5;
       border-radius: 14px;
       padding: 20px 22px;
-      position: relative;
     }
 
     .result-text {
@@ -248,15 +282,28 @@
       word-break: keep-all;
     }
 
-    .result-text .story-line {
+    /* PRD 결과 스타일 */
+    .prd-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #03c75a;
+      letter-spacing: 0.2px;
+      margin-top: 16px;
+      margin-bottom: 4px;
       display: block;
-      padding: 6px 0;
-      border-bottom: 1px solid #eff1f5;
     }
 
-    .result-text .story-line:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+    .prd-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .prd-section-body {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.85;
+      white-space: pre-wrap;
+      word-break: keep-all;
+      display: block;
     }
 
     .copy-btn {
@@ -338,78 +385,184 @@
       <a href="tools.html" class="active">도구</a>
     </nav>
 
-    <!-- 헤더 -->
-    <div class="tool-header reveal">
-      <div class="tool-icon">✍️</div>
-      <div class="tool-title">사용자 스토리 생성기</div>
-      <div class="tool-desc">
-        기능 아이디어를 입력하면<br />
-        <em>AI가 사용자 스토리 형식</em>으로 변환해드려요
-      </div>
+    <!-- 도구 탭 -->
+    <div class="tool-tabs reveal">
+      <button class="tool-tab active" id="tabStory" onclick="switchTool('story')">✍️ 사용자 스토리</button>
+      <button class="tool-tab" id="tabPRD" onclick="switchTool('prd')">📋 PRD 작성 도우미</button>
     </div>
 
-    <hr class="divider" />
+    <!-- ════════════════════════════════════════
+         도구 1: 사용자 스토리 생성기
+    ════════════════════════════════════════ -->
+    <div id="toolStory">
 
-    <!-- 입력 영역 -->
-    <div class="reveal" style="transition-delay: 0.07s;">
-      <div class="section-label">기능 아이디어 입력</div>
-      <div class="input-area">
-        <textarea
-          class="idea-textarea"
-          id="ideaInput"
-          placeholder="예: 사용자가 상품 이미지를 올리면 AI가 자동으로 상품명, 카테고리, 설명을 생성해주는 기능"
-        ></textarea>
-        <button class="generate-btn" id="generateBtn">사용자 스토리 생성</button>
-        <div class="loading-row" id="loadingRow">
-          <div class="spinner"></div>
-          <span>AI가 사용자 스토리를 작성 중입니다...</span>
+      <div class="tool-header reveal">
+        <div class="tool-icon">✍️</div>
+        <div class="tool-title">사용자 스토리 생성기</div>
+        <div class="tool-desc">
+          기능 아이디어를 입력하면<br />
+          <em>AI가 사용자 스토리 형식</em>으로 변환해드려요
         </div>
       </div>
-    </div>
 
-    <!-- 결과 영역 -->
-    <div class="result-section reveal" id="resultSection" style="transition-delay: 0.05s;">
       <hr class="divider" />
-      <div class="section-label">생성된 사용자 스토리</div>
-      <div class="result-box">
-        <div class="result-text" id="resultText"></div>
-      </div>
-      <button class="copy-btn" id="copyBtn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-        </svg>
-        결과 복사하기
-      </button>
-    </div>
 
-    <!-- 에러 영역 -->
-    <div class="error-msg" id="errorMsg">
-      오류가 발생했습니다. 잠시 후 다시 시도해주세요.
-    </div>
+      <div class="reveal" style="transition-delay: 0.07s;">
+        <div class="section-label">기능 아이디어 입력</div>
+        <div class="input-area">
+          <textarea
+            class="idea-textarea"
+            id="storyInput"
+            placeholder="예: 사용자가 상품 이미지를 올리면 AI가 자동으로 상품명, 카테고리, 설명을 생성해주는 기능"
+          ></textarea>
+          <button class="generate-btn" id="storyBtn">사용자 스토리 생성</button>
+          <div class="loading-row" id="storyLoading">
+            <div class="spinner"></div>
+            <span>AI가 사용자 스토리를 작성 중입니다...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-section reveal" id="storyResult" style="transition-delay: 0.05s;">
+        <hr class="divider" />
+        <div class="section-label">생성된 사용자 스토리</div>
+        <div class="result-box">
+          <div class="result-text" id="storyResultText"></div>
+        </div>
+        <button class="copy-btn" id="storyCopyBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          결과 복사하기
+        </button>
+      </div>
+
+      <div class="error-msg" id="storyError">
+        오류가 발생했습니다. 잠시 후 다시 시도해주세요.
+      </div>
+
+    </div><!-- /toolStory -->
+
+    <!-- ════════════════════════════════════════
+         도구 2: PRD 작성 도우미
+    ════════════════════════════════════════ -->
+    <div id="toolPRD" style="display:none;">
+
+      <div class="tool-header reveal">
+        <div class="tool-icon">📋</div>
+        <div class="tool-title">PRD 작성 도우미</div>
+        <div class="tool-desc">
+          기능 아이디어 한 줄을 입력하면<br />
+          <em>AI가 실무용 PRD 초안</em>을 바로 작성해드려요
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="reveal" style="transition-delay: 0.07s;">
+        <div class="section-label">기능 아이디어 입력</div>
+        <div class="input-area">
+          <textarea
+            class="idea-textarea"
+            id="prdInput"
+            placeholder="예: 판매자가 상품 등록 시 AI가 자동으로 상세페이지 초안을 생성해주는 기능"
+          ></textarea>
+          <button class="generate-btn" id="prdBtn">PRD 초안 생성</button>
+          <div class="loading-row" id="prdLoading">
+            <div class="spinner"></div>
+            <span>AI가 PRD 초안을 작성 중입니다...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-section reveal" id="prdResult" style="transition-delay: 0.05s;">
+        <hr class="divider" />
+        <div class="section-label">생성된 PRD 초안</div>
+        <div class="result-box">
+          <div id="prdResultText"></div>
+        </div>
+        <button class="copy-btn" id="prdCopyBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          결과 복사하기
+        </button>
+      </div>
+
+      <div class="error-msg" id="prdError">
+        오류가 발생했습니다. 잠시 후 다시 시도해주세요.
+      </div>
+
+    </div><!-- /toolPRD -->
 
     <div class="footer reveal" style="transition-delay: 0.1s;">강태은의 도구 · 2026</div>
   </div>
 
   <script>
-    const ideaInput = document.getElementById('ideaInput');
-    const generateBtn = document.getElementById('generateBtn');
-    const loadingRow = document.getElementById('loadingRow');
-    const resultSection = document.getElementById('resultSection');
-    const resultText = document.getElementById('resultText');
-    const copyBtn = document.getElementById('copyBtn');
-    const errorMsg = document.getElementById('errorMsg');
+    /* ── 탭 전환 ── */
+    function switchTool(tool) {
+      const isStory = tool === 'story';
+      document.getElementById('toolStory').style.display = isStory ? '' : 'none';
+      document.getElementById('toolPRD').style.display = isStory ? 'none' : '';
+      document.getElementById('tabStory').classList.toggle('active', isStory);
+      document.getElementById('tabPRD').classList.toggle('active', !isStory);
+
+      // 전환 시 새로 나타난 reveal 요소들 애니메이션
+      const activeSection = isStory
+        ? document.getElementById('toolStory')
+        : document.getElementById('toolPRD');
+      activeSection.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+        revealObserver.observe(el);
+      });
+    }
+
+    /* ── 복사 버튼 공통 함수 ── */
+    function setupCopyBtn(btnId, getTextFn) {
+      const btn = document.getElementById(btnId);
+      btn.addEventListener('click', async () => {
+        const text = getTextFn();
+        const copyIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+        const checkIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        btn.classList.add('copied');
+        btn.innerHTML = checkIcon + ' 복사 완료!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = copyIcon + ' 결과 복사하기';
+        }, 2000);
+      });
+    }
+
+    /* ════════════════════════════════════════
+       도구 1: 사용자 스토리 생성기
+    ════════════════════════════════════════ */
+    const storyInput   = document.getElementById('storyInput');
+    const storyBtn     = document.getElementById('storyBtn');
+    const storyLoading = document.getElementById('storyLoading');
+    const storyResult  = document.getElementById('storyResult');
+    const storyResultText = document.getElementById('storyResultText');
+    const storyError   = document.getElementById('storyError');
 
     async function generateStory() {
-      const idea = ideaInput.value.trim();
-      if (!idea || generateBtn.disabled) return;
+      const idea = storyInput.value.trim();
+      if (!idea || storyBtn.disabled) return;
 
-      // 상태 초기화
-      errorMsg.classList.remove('visible');
-      resultSection.classList.remove('visible');
-      generateBtn.disabled = true;
-      ideaInput.disabled = true;
-      loadingRow.classList.add('visible');
+      storyError.classList.remove('visible');
+      storyResult.classList.remove('visible');
+      storyBtn.disabled = true;
+      storyInput.disabled = true;
+      storyLoading.classList.add('visible');
 
       const systemPrompt = `당신은 IT 서비스 기획 전문가입니다.
 사용자가 기능 아이디어를 설명하면, 아래 형식의 사용자 스토리로 변환해주세요.
@@ -429,82 +582,115 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            messages: [
-              { role: 'user', content: idea }
-            ],
-            system: systemPrompt
+            messages: [{ role: 'user', content: idea }],
+            system: systemPrompt,
           }),
         });
-
         if (!res.ok) throw new Error('API 오류');
-
         const data = await res.json();
         const reply = data.message || '';
-
         if (!reply) throw new Error('빈 응답');
 
-        resultText.textContent = reply;
-        resultSection.classList.add('visible');
-        copyBtn.textContent = '';
-        copyBtn.innerHTML = `
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          결과 복사하기
-        `;
-        copyBtn.classList.remove('copied');
+        storyResultText.textContent = reply;
+        storyResult.classList.add('visible');
       } catch {
-        errorMsg.classList.add('visible');
+        storyError.classList.add('visible');
       }
 
-      loadingRow.classList.remove('visible');
-      generateBtn.disabled = false;
-      ideaInput.disabled = false;
+      storyLoading.classList.remove('visible');
+      storyBtn.disabled = false;
+      storyInput.disabled = false;
     }
 
-    generateBtn.addEventListener('click', generateStory);
-
-    ideaInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        generateStory();
-      }
+    storyBtn.addEventListener('click', generateStory);
+    storyInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); generateStory(); }
     });
+    setupCopyBtn('storyCopyBtn', () => storyResultText.textContent);
 
-    copyBtn.addEventListener('click', async () => {
-      const text = resultText.textContent;
+    /* ════════════════════════════════════════
+       도구 2: PRD 작성 도우미
+    ════════════════════════════════════════ */
+    const prdInput   = document.getElementById('prdInput');
+    const prdBtn     = document.getElementById('prdBtn');
+    const prdLoading = document.getElementById('prdLoading');
+    const prdResult  = document.getElementById('prdResult');
+    const prdResultText = document.getElementById('prdResultText');
+    const prdError   = document.getElementById('prdError');
+
+    let prdRawText = '';
+
+    function renderPRD(text) {
+      // ## 헤딩을 스타일 요소로 변환해서 표시
+      prdResultText.innerHTML = '';
+      const lines = text.split('\n');
+      let bodyLines = [];
+
+      function flushBody() {
+        if (bodyLines.length === 0) return;
+        const span = document.createElement('span');
+        span.className = 'prd-section-body';
+        span.textContent = bodyLines.join('\n').replace(/^\n+|\n+$/g, '');
+        prdResultText.appendChild(span);
+        bodyLines = [];
+      }
+
+      lines.forEach(line => {
+        if (line.startsWith('## ')) {
+          flushBody();
+          const title = document.createElement('span');
+          title.className = 'prd-section-title';
+          title.textContent = line.replace('## ', '');
+          prdResultText.appendChild(title);
+        } else {
+          bodyLines.push(line);
+        }
+      });
+      flushBody();
+    }
+
+    async function generatePRD() {
+      const idea = prdInput.value.trim();
+      if (!idea || prdBtn.disabled) return;
+
+      prdError.classList.remove('visible');
+      prdResult.classList.remove('visible');
+      prdBtn.disabled = true;
+      prdInput.disabled = true;
+      prdLoading.classList.add('visible');
+
       try {
-        await navigator.clipboard.writeText(text);
-        copyBtn.classList.add('copied');
-        copyBtn.innerHTML = `
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          복사 완료!
-        `;
-        setTimeout(() => {
-          copyBtn.classList.remove('copied');
-          copyBtn.innerHTML = `
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            결과 복사하기
-          `;
-        }, 2000);
-      } catch {
-        // clipboard API 미지원 환경 fallback
-        const range = document.createRange();
-        range.selectNode(resultText);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand('copy');
-        window.getSelection().removeAllRanges();
-      }
-    });
+        const res = await fetch('/api/prd', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: idea }],
+          }),
+        });
+        if (!res.ok) throw new Error('API 오류');
+        const data = await res.json();
+        const reply = data.message || '';
+        if (!reply) throw new Error('빈 응답');
 
-    // 스크롤 애니메이션
+        prdRawText = reply;
+        renderPRD(reply);
+        prdResult.classList.add('visible');
+      } catch {
+        prdError.classList.add('visible');
+      }
+
+      prdLoading.classList.remove('visible');
+      prdBtn.disabled = false;
+      prdInput.disabled = false;
+    }
+
+    prdBtn.addEventListener('click', generatePRD);
+    prdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); generatePRD(); }
+    });
+    setupCopyBtn('prdCopyBtn', () => prdRawText);
+
+    /* ── 스크롤 애니메이션 ── */
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
