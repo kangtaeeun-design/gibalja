@@ -247,6 +247,18 @@
       color: #bbb;
       text-align: center;
     }
+
+    /* ── 스크롤 애니메이션 ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -259,7 +271,7 @@
     </nav>
 
     <!-- 헤더 -->
-    <div class="project-header">
+    <div class="project-header reveal">
       <div class="project-icon">🛒</div>
       <div class="project-title">No Seller / No MD</div>
       <div class="project-tagline">
@@ -268,7 +280,7 @@
       </div>
     </div>
 
-    <div class="status-row">
+    <div class="status-row reveal" style="transition-delay: 0.1s;">
       <span class="status-badge">
         <span class="status-dot"></span>
         진행 중
@@ -278,8 +290,8 @@
     <hr class="divider" />
 
     <!-- 배경 -->
-    <div class="section-label">Background · 프로젝트 배경</div>
-    <div class="background-text">
+    <div class="section-label reveal">Background · 프로젝트 배경</div>
+    <div class="background-text reveal" style="transition-delay: 0.08s;">
       기존 커머스는 <strong>셀러의 상품 등록</strong>과 <strong>MD의 상품 선정</strong>이라는 두 개의 인간 개입이 필수였습니다.<br /><br />
       셀러는 수백 장의 이미지를 올리고 옵션을 설정하느라 지치고, MD는 수천 개의 상품 중 무엇을 노출할지 매일 판단해야 합니다.<br /><br />
       이 구조는 <strong>확장에 한계</strong>가 있고, <strong>사람의 판단 편향</strong>이 고객 경험에 그대로 전달됩니다. 이 문제를 근본부터 바꾸는 것이 이 프로젝트의 출발점입니다.
@@ -288,23 +300,23 @@
     <hr class="divider" />
 
     <!-- 목표 -->
-    <div class="section-label">Goals · 프로젝트 목표</div>
+    <div class="section-label reveal">Goals · 프로젝트 목표</div>
     <div class="goal-list">
-      <div class="goal-item">
+      <div class="goal-item reveal" style="transition-delay: 0.05s;">
         <div class="icon">🤖</div>
         <div class="goal-text">
           <strong>상품 등록 자동화</strong><br />
           셀러가 이미지만 올리면 AI가 카테고리·옵션·설명을 자동 생성해 등록 부담을 없앤다.
         </div>
       </div>
-      <div class="goal-item">
+      <div class="goal-item reveal" style="transition-delay: 0.13s;">
         <div class="icon">🎯</div>
         <div class="goal-text">
           <strong>개인화 노출 최적화</strong><br />
           MD의 큐레이션 없이도 고객별 맥락에 맞는 상품이 자동으로 노출되는 구조를 만든다.
         </div>
       </div>
-      <div class="goal-item">
+      <div class="goal-item reveal" style="transition-delay: 0.21s;">
         <div class="icon">📈</div>
         <div class="goal-text">
           <strong>성과 기반 자가 학습</strong><br />
@@ -316,27 +328,39 @@
     <hr class="divider" />
 
     <!-- 내 역할 -->
-    <div class="section-label">My Role · 내 역할</div>
+    <div class="section-label reveal">My Role · 내 역할</div>
     <div class="role-list">
-      <div class="role-item">
+      <div class="role-item reveal" style="transition-delay: 0.05s;">
         <span class="role-badge">서비스 기획</span>
         <span class="role-desc">사용자 여정 설계 및 핵심 플로우 정의</span>
       </div>
-      <div class="role-item">
+      <div class="role-item reveal" style="transition-delay: 0.11s;">
         <span class="role-badge">요구사항 정의</span>
         <span class="role-desc">AI 자동화 범위와 운영 정책 기준 수립</span>
       </div>
-      <div class="role-item">
+      <div class="role-item reveal" style="transition-delay: 0.17s;">
         <span class="role-badge">데이터 기획</span>
         <span class="role-desc">노출 알고리즘 개선을 위한 지표 설계</span>
       </div>
-      <div class="role-item">
+      <div class="role-item reveal" style="transition-delay: 0.23s;">
         <span class="role-badge">실험 설계</span>
         <span class="role-desc">A/B 테스트 기획 및 결과 해석</span>
       </div>
     </div>
 
-    <div class="footer">강태은의 프로젝트 · 2026</div>
+    <div class="footer reveal" style="transition-delay: 0.1s;">강태은의 프로젝트 · 2026</div>
   </div>
+  <script>
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
 </body>
 </html>

@@ -338,6 +338,18 @@
       border-color: transparent;
       box-shadow: 0 2px 8px rgba(0, 196, 115, 0.35);
     }
+
+    /* ── 스크롤 애니메이션 ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -346,25 +358,25 @@
       <a href="index.html" class="active">소개</a>
       <a href="projects.html">프로젝트</a>
     </nav>
-    <div class="avatar">👋</div>
-    <div class="name">강태은</div>
-    <div class="job">Product Planner · 기획자</div>
+    <div class="avatar reveal">👋</div>
+    <div class="name reveal" style="transition-delay: 0.07s;">강태은</div>
+    <div class="job reveal" style="transition-delay: 0.13s;">Product Planner · 기획자</div>
     <hr class="divider" />
-    <div class="goal-label">My Goal</div>
-    <div class="goal">
+    <div class="goal-label reveal" style="transition-delay: 0.05s;">My Goal</div>
+    <div class="goal reveal" style="transition-delay: 0.12s;">
       <em>3개월</em> 안에<br />뭐든 만드는 사람이 될 것이다.
     </div>
     <hr class="divider" style="margin-top: 36px; margin-bottom: 0;" />
-    <div class="skills-label">배우는 중인 것들</div>
-    <div class="skills">
+    <div class="skills-label reveal" style="transition-delay: 0.05s;">배우는 중인 것들</div>
+    <div class="skills reveal" style="transition-delay: 0.12s;">
       <span class="skill-tag">Claude Code</span>
       <span class="skill-tag">Git</span>
       <span class="skill-tag">HTML / CSS</span>
       <span class="skill-tag">배포 (Vercel)</span>
     </div>
-    <div class="footer">첫 번째 웹페이지 · 2026</div>
+    <div class="footer reveal" style="transition-delay: 0.08s;">첫 번째 웹페이지 · 2026</div>
 
-    <div class="chat-section">
+    <div class="chat-section reveal" style="transition-delay: 0.1s;">
       <hr class="divider" style="margin-bottom: 20px;" />
       <div class="chat-label">강태은에 대해 뭐든 물어보세요 💬</div>
       <div class="chat-card">
@@ -413,6 +425,34 @@
       return messageEl;
     }
 
+    function typeMessage(text) {
+      return new Promise(resolve => {
+        const messageEl = document.createElement('div');
+        messageEl.className = 'message assistant';
+
+        const bubbleEl = document.createElement('div');
+        bubbleEl.className = 'bubble';
+        bubbleEl.textContent = '';
+
+        messageEl.appendChild(bubbleEl);
+        chatMessages.appendChild(messageEl);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        let i = 0;
+        function tick() {
+          if (i < text.length) {
+            bubbleEl.textContent += text[i];
+            i++;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            setTimeout(tick, 16);
+          } else {
+            resolve();
+          }
+        }
+        tick();
+      });
+    }
+
     function addTypingIndicator() {
       const messageEl = document.createElement('div');
       messageEl.className = 'message assistant';
@@ -452,11 +492,11 @@
         const reply = data.message || '응답을 받지 못했습니다';
 
         loadingEl.remove();
-        addMessage('assistant', reply);
+        await typeMessage(reply);
         conversationHistory.push({ role: 'assistant', content: reply });
       } catch {
         loadingEl.remove();
-        addMessage('assistant', '오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        await typeMessage('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
       }
 
       sendBtn.disabled = false;
@@ -471,6 +511,18 @@
         sendMessage();
       }
     });
+
+    // 스크롤 애니메이션
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
   </script>
 </body>
 </html>
