@@ -304,10 +304,48 @@
     .chat-btn svg {
       margin-left: 2px;
     }
+
+    /* ── 네비게이션 ── */
+    .nav {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .nav a {
+      font-size: 13px;
+      font-weight: 600;
+      color: #aaa;
+      text-decoration: none;
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1.5px solid #e8e8e8;
+      background: #f5f5f5;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
+    }
+
+    .nav a:hover {
+      color: #03c75a;
+      border-color: #03c75a;
+      background: #e8faf1;
+    }
+
+    .nav a.active {
+      color: #fff;
+      background: linear-gradient(135deg, #00c473, #03c75a);
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(0, 196, 115, 0.35);
+    }
   </style>
 </head>
 <body>
   <div class="card">
+    <nav class="nav">
+      <a href="index.html" class="active">소개</a>
+      <a href="projects.html">프로젝트</a>
+    </nav>
     <div class="avatar">👋</div>
     <div class="name">강태은</div>
     <div class="job">Product Planner · 기획자</div>

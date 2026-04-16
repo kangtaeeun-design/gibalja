@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>강태은 | 프로젝트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #0a0e1a 0%, #0d1832 40%, #0f2045 70%, #0a1628 100%);
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #333;
+      padding: 32px 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 52px 56px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.45),
+        0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ── 네비게이션 ── */
+    .nav {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .nav a {
+      font-size: 13px;
+      font-weight: 600;
+      color: #aaa;
+      text-decoration: none;
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1.5px solid #e8e8e8;
+      background: #f5f5f5;
+      letter-spacing: 0.3px;
+      transition: all 0.2s;
+    }
+
+    .nav a:hover {
+      color: #03c75a;
+      border-color: #03c75a;
+      background: #e8faf1;
+    }
+
+    .nav a.active {
+      color: #fff;
+      background: linear-gradient(135deg, #00c473, #03c75a);
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(0, 196, 115, 0.35);
+    }
+
+    /* ── 헤더 ── */
+    .project-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .project-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #0a0e1a, #0f2045);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 32px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #111;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .project-tagline {
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    .project-tagline em {
+      font-style: normal;
+      color: #03c75a;
+      font-weight: 700;
+    }
+
+    /* ── 구분선 ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 36px 0;
+    }
+
+    /* ── 섹션 공통 ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #aaa;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    /* ── 배경 섹션 ── */
+    .background-text {
+      font-size: 14.5px;
+      color: #444;
+      line-height: 1.85;
+    }
+
+    .background-text strong {
+      color: #111;
+      font-weight: 700;
+    }
+
+    /* ── 목표 섹션 ── */
+    .goal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .goal-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: #f7f9fc;
+      border: 1px solid #eff1f5;
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+
+    .goal-item .icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .goal-item .goal-text {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .goal-item .goal-text strong {
+      color: #03c75a;
+      font-weight: 700;
+    }
+
+    /* ── 내 역할 섹션 ── */
+    .role-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .role-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .role-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #03c75a;
+      background: #e8faf1;
+      border-radius: 6px;
+      padding: 3px 10px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      min-width: 72px;
+      text-align: center;
+    }
+
+    .role-desc {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    /* ── 상태 배지 ── */
+    .status-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #e67e00;
+      background: #fff7ec;
+      border: 1px solid #ffe0b2;
+      border-radius: 20px;
+      padding: 5px 14px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #e67e00;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #bbb;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <!-- 네비게이션 -->
+    <nav class="nav">
+      <a href="index.html">소개</a>
+      <a href="projects.html" class="active">프로젝트</a>
+    </nav>
+
+    <!-- 헤더 -->
+    <div class="project-header">
+      <div class="project-icon">🛒</div>
+      <div class="project-title">No Seller / No MD</div>
+      <div class="project-tagline">
+        셀러도, MD도 없이<br />
+        <em>상품이 스스로 팔리는 쇼핑의 미래</em>를 만드는 프로젝트
+      </div>
+    </div>
+
+    <div class="status-row">
+      <span class="status-badge">
+        <span class="status-dot"></span>
+        진행 중
+      </span>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 배경 -->
+    <div class="section-label">Background · 프로젝트 배경</div>
+    <div class="background-text">
+      기존 커머스는 <strong>셀러의 상품 등록</strong>과 <strong>MD의 상품 선정</strong>이라는 두 개의 인간 개입이 필수였습니다.<br /><br />
+      셀러는 수백 장의 이미지를 올리고 옵션을 설정하느라 지치고, MD는 수천 개의 상품 중 무엇을 노출할지 매일 판단해야 합니다.<br /><br />
+      이 구조는 <strong>확장에 한계</strong>가 있고, <strong>사람의 판단 편향</strong>이 고객 경험에 그대로 전달됩니다. 이 문제를 근본부터 바꾸는 것이 이 프로젝트의 출발점입니다.
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 목표 -->
+    <div class="section-label">Goals · 프로젝트 목표</div>
+    <div class="goal-list">
+      <div class="goal-item">
+        <div class="icon">🤖</div>
+        <div class="goal-text">
+          <strong>상품 등록 자동화</strong><br />
+          셀러가 이미지만 올리면 AI가 카테고리·옵션·설명을 자동 생성해 등록 부담을 없앤다.
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="icon">🎯</div>
+        <div class="goal-text">
+          <strong>개인화 노출 최적화</strong><br />
+          MD의 큐레이션 없이도 고객별 맥락에 맞는 상품이 자동으로 노출되는 구조를 만든다.
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="icon">📈</div>
+        <div class="goal-text">
+          <strong>성과 기반 자가 학습</strong><br />
+          클릭·구매 데이터를 실시간 반영해 상품이 스스로 더 잘 팔리는 방향으로 진화한다.
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- 내 역할 -->
+    <div class="section-label">My Role · 내 역할</div>
+    <div class="role-list">
+      <div class="role-item">
+        <span class="role-badge">서비스 기획</span>
+        <span class="role-desc">사용자 여정 설계 및 핵심 플로우 정의</span>
+      </div>
+      <div class="role-item">
+        <span class="role-badge">요구사항 정의</span>
+        <span class="role-desc">AI 자동화 범위와 운영 정책 기준 수립</span>
+      </div>
+      <div class="role-item">
+        <span class="role-badge">데이터 기획</span>
+        <span class="role-desc">노출 알고리즘 개선을 위한 지표 설계</span>
+      </div>
+      <div class="role-item">
+        <span class="role-badge">실험 설계</span>
+        <span class="role-desc">A/B 테스트 기획 및 결과 해석</span>
+      </div>
+    </div>
+
+    <div class="footer">강태은의 프로젝트 · 2026</div>
+  </div>
+</body>
+</html>
